@@ -1,0 +1,58 @@
+<svg viewBox="0 0 94 24" xmlns="http://www.w3.org/2000/svg">
+  <style>
+@media (prefers-color-scheme: light) {
+  :root {
+    --c-fg: #222;
+    --c-bg: #fff;
+  }
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --c-fg: #ddd;
+    --c-bg: #222;
+  }
+}
+
+style ~ * {
+  display: none;
+}
+:target, :target ~ * {
+  display: inline;
+}
+[id$="-ended"]:target ~ * > #__win {
+  fill: var(--c-fg);
+}
+
+path {
+  fill: var(--c-fg);
+  stroke: var(--c-bg);
+  stroke-width: 1;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+#lives-0-ended > :nth-child(2n + 1) {
+  fill: none;
+  stroke-width: 4;
+}
+#lives-0-ended > :nth-child(2n) {
+  fill: none;
+  stroke: var(--c-fg);
+  stroke-width: 2;
+}
+  </style>
+  <g id="lives-9" /><path id="lives-9-ended" d="M20,7,H88v10H13" />
+  <g id="lives-8" /><path id="lives-8-ended" d="M20,7,H84l-4,10H13" />
+  <g id="lives-7" /><path id="lives-7-ended" d="M20,7,H76l-4,10H13" />
+  <g id="lives-6" /><path id="lives-6-ended" d="M20,7,H68l-4,10H13" />
+  <g id="lives-5" /><path id="lives-5-ended" d="M20,7,H60l-4,10H13" />
+  <g id="lives-4" /><path id="lives-4-ended" d="M20,7,H52l-4,10H13" />
+  <g id="lives-3" /><path id="lives-3-ended" d="M20,7,H44l-4,10H13" />
+  <g id="lives-2" /><path id="lives-2-ended" d="M20,7,H36l-4,10H13" />
+  <g id="lives-1" /><path id="lives-1-ended" d="M20,7,H28l-4,10H13" />
+  <g id="lives-0" /><g id="lives-0-ended">
+    <path d="M19,7,H88V17H14" />
+    <path d="M19,7,H88V17H14" />
+    <path d="M12,19L6,13A3,3,128,1,1,12,7A3,3,128,1,1,18,13Z" />
+    <path id="__win" d="M12,19L6,13A3,3,128,1,1,12,7A3,3,128,1,1,18,13Z" />
+  </g>
+</svg>

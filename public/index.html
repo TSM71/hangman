@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Mono:wght@100..900&family=Noto+Sans+Symbols+2&display=swap" rel="stylesheet">
+  <title>Jeu du Pendu</title>
+  <link rel="stylesheet" href="data/style.css">
+  <script src="data/script.js"></script>
+</head>
+<body>
+  <script>
+/** @type {{ [x: string]: { lang: string, title: string, keyboardLayout: string[], imageAlt: (lives: number | null, ended: boolean | null) => string, inputPlaceholder: string, newGameButton: string, abortButton: string, winNotification: string, loseNotification: string, statisticsText: (stats: { won: boolean, word: string, wordPlays: number, wordWins: number, wordLosses: number, serverPlays: number, serverWins: number, serverLosses: number }) => string } }} */
+const languages = {
+  fr: {
+    lang: 'fr',
+    title: 'Jeu du Pendu',
+    keyboardLayout: [ 'azertyuiop', 'qsdfghjklm', 'wxcvbn' ],
+    imageAlt: (lives, ended) => lives === null ? '' : `${lives} vie${lives === 1 ? '' : 's'} restante${lives === 1 ? '' : 's'}`,
+    inputPlaceholder: 'Entrez un mot...',
+    newGameButton: 'Nouvelle partie',
+    abortButton: 'Abandonner',
+    winNotification: 'Bravo!',
+    loseNotification: 'Dommage...',
+    statisticsText: stats => `\
+Ce mot a été joué ${stats.wordWins + stats.wordLosses} fois. \
+${(stats.wordWins / (stats.wordWins + stats.wordLosses) * 100).toFixed()}% des parties ont été gagnées.
+Ce serveur a permis ${stats.serverWins + stats.serverLosses} partie${stats.serverWins + stats.serverLosses === 1 ? '' : 's'}. \
+${(stats.serverWins / (stats.serverWins + stats.serverLosses) * 100).toFixed()}% des parties on été gagnées.`
+  },
+  en: {
+    lang: 'en',
+    title: 'Hangman',
+    keyboardLayout: [ 'qwertyuiop', 'asdfghjkl', 'zxcvbnm' ],
+    imageAlt: (lives, ended) => lives === null ? '' : `${lives} li${lives === 1 ? 'fe' : 'ves'} left`,
+    inputPlaceholder: 'Enter a word...',
+    newGameButton: 'New game',
+    abortButton: 'Give up',
+    winNotification: 'Congratulations!',
+    loseNotification: 'Too bad...',
+    statisticsText: stats => `\
+This word has been played to the end ${stats.wordWins + stats.wordLosses} time${stats.wordWins + stats.wordLosses === 1 ? '' : 's'}. \
+Wins account for ${(stats.wordWins / (stats.wordWins + stats.wordLosses) * 100).toFixed()}% of finished games.
+This server has seen ${stats.serverWins + stats.serverLosses} game${stats.serverWins + stats.serverLosses === 1 ? '' : 's'} played to the end. \
+Wins account for ${(stats.serverWins / (stats.serverWins + stats.serverLosses) * 100).toFixed()}% of finished games.`
+  },
+}
+
+/** @type {Record<string, (lives: number | null, ended: boolean | null) => string>} */
+const images = {
+  hangman: (lives, ended) => `img/hangman.svg#lives-${lives ?? 0}`,
+  healthbar: (lives, ended) => `img/healthbar.svg#lives-${lives ?? 9}${ended ? '-ended' : ''}`,
+}
+
+const options = new URL(location).searchParams
+const selectedLanguage = languages[Object.hasOwn(languages, options.get('lang')) ? options.get('lang') : 'fr']
+const selectedImage = images[Object.hasOwn(images, options.get('img')) ? options.get('img') : 'hangman']
+const isColorblind = options.has('colorblind')
+
+document.documentElement.lang = selectedLanguage.lang
+document.title = selectedLanguage.title
+if (isColorblind) document.documentElement.dataset.colorblind = ''
+
+const { rootElement, keydownListener } = init({
+  imgSrc: selectedImage,
+  imgText: selectedLanguage.imageAlt,
+  input: selectedLanguage.inputPlaceholder,
+  keyboard: selectedLanguage.keyboardLayout,
+  new: selectedLanguage.newGameButton,
+  abort: selectedLanguage.abortButton,
+  won: selectedLanguage.winNotification,
+  lost: selectedLanguage.loseNotification,
+  statsText: stats => Object.keys(stats).length === 0 ? '' : selectedLanguage.statisticsText(stats)
+}, word => word === '' ? ServerGame.new('data/api.php') : LocalGame.new(word, 9))
+
+document.body.appendChild(rootElement)
+document.addEventListener('keydown', keydownListener)
+  </script>
+</body>
+</html>

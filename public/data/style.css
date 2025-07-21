@@ -1,0 +1,148 @@
+@media (prefers-color-scheme: light) {
+  :root {
+    --c-fg: #222;
+    --c-bg: #fff;
+    --c-ok: #0a0;
+    --c-ko: #d00;
+  }
+  [data-colorblind] {
+    --c-ok: #44d;
+  }
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --c-fg: #ddd;
+    --c-bg: #222;
+    --c-ok: #4d4;
+    --c-ko: #d22;
+  }
+  [data-colorblind] {
+    --c-ok: #66f;
+  }
+}
+
+body {
+  margin : 0;
+  display: flex;
+  justify-content: center;
+  background-color: var(--c-bg);
+  color: var(--c-fg);
+  font-family: "Noto Sans Mono", "Noto Sans Symbols 2";
+  font-weight: bold;
+}
+
+button, input {
+  appearance: none;
+  outline: transparent;
+  border: none;
+  font: inherit;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--c-fg);
+  color: var(--c-bg);
+}
+button.ui-ok {
+  background-color: var(--c-ok);
+}
+button.ui-ko {
+  background-color: var(--c-ko);
+}
+input {
+  text-align: center;
+  background-color: transparent;
+  color: var(--c-fg);
+}
+input::placeholder {
+  color: var(--c-fg);
+  opacity: 0.5;
+}
+
+.ui-root {
+  --aspect-ratio: calc(45 / 64);
+  --width: min(100vw, 100vh * var(--aspect-ratio));
+  --height: min(100vw / var(--aspect-ratio), 100vh);
+  width: var(--width);
+  height: var(--height);
+  display: flex;
+  flex-direction: column;
+  --spacing: calc(var(--width) / 120);
+  --font-size: 0.75;
+}
+
+.ui-image {
+  flex: 1;
+  position: relative;
+}
+.ui-image > img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.ui-image > * > a {
+  position: absolute;
+  top: calc(var(--spacing) * 2 - 0.2em);
+  left: calc(var(--spacing) * 2);
+  color: inherit;
+  text-decoration: none;
+  font-size: calc(var(--width) / 10);
+  font-weight: normal;
+}
+.ui-image > * > a > span::after {
+  content: '🛈';
+}
+
+.ui-generic {
+  font-size: calc(var(--width) / 12);
+  height: calc(var(--width) / 12 / var(--font-size));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing);
+}
+.ui-guess {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.2em;
+}
+
+.ui-keyboard {
+  --keysize: calc((var(--width) - var(--spacing)) / var(--kb-cols) - var(--spacing));
+  height: calc((var(--width) - var(--spacing)) / var(--kb-cols) * var(--kb-rows) + var(--spacing));
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--spacing);
+}
+.ui-keyboard > * {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing);
+}
+.ui-keyboard > * > * {
+  width: var(--keysize);
+  height: var(--keysize);
+  font-size: calc(var(--keysize) * var(--font-size));
+  position: relative;
+}
+.ui-keyboard > * > * > span::after {
+  position: absolute;
+  font-size: 0.5em;
+}
+[data-colorblind] .ui-keyboard > * > .ui-ok > span::after {
+  content: '✓';
+  right: 0;
+  bottom: -0.5em;
+}
+[data-colorblind] .ui-keyboard > * > .ui-ko > span::after {
+  content: '✗';
+  left: 0;
+  top: -0.3em;
+}
